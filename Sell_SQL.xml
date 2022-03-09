@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sell">
+<!-- namespace : 클래스명과 동일 -->
+<!-- id : 메소드명과 동일 -->
+<!-- resultType : 취득할 데이터 row의 형태를 지정 -->
+<!-- 쿼리부분에 ;은 포함되면 안된다. MyBatis가 끝에 알아서 붙임 -->
+	<select id="getaSellCnt" resultType="Integer" parameterType="hashmap">
+		SELECT COUNT(*) AS CNT
+		FROM SELL
+		WHERE SELL.ITEM_NAME = '고구마'
+<!-- 		<if test="searchTxt != null and searchTxt !=''"> -->
+<!-- 			<choose> -->
+<!-- 				<when test="searchGbn == 0"> -->
+<!-- 					AND TB.TB_TITLE LIKE '%' || #{searchTxt} || '%' -->
+<!-- 				</when> -->
+<!-- 				<when test="searchGbn == 1"> -->
+<!-- 					AND M.M_NM LIKE '%' || #{searchTxt} || '%' -->
+<!-- 				</when> -->
+<!-- 			</choose> -->
+<!-- 		</if> -->
+	</select>
+	
+	<select id="getaSellList" resultType="hashmap" parameterType="hashmap">
+		SELECT SELL.SELL_NO, SELL.ITEM_NAME, SELL.COUNT, TO_CHAR(SELL.SELL_DT, 'YYYY-MM-DD') AS SELL_DT
+		FROM SELL
+		ORDER BY SELL.SELL_NO ASC
+<!-- 		WHERE SELL.RNUM BETWEEN #{startCount} AND #{endCount} -->
+	</select>
+	<!-- #{키} : 키에 해당하는 값을 넣어준다. 앞뒤로 홑따옴표 '' 붙임 -->
+	<!-- ${키} : 키에 해당하는 값을 넣어준다. 그냥 넣음 -->
+	<select id="getaSell" resultType="hashmap" parameterType="hashmap">
+	SELECT SELL.SELL_NO, SELL.ITEM_NAME, SELL.COUNT, TO_CHAR(SELL.SELL_DT, 'YYYY-MM-DD') AS SELL_DT
+	FROM SELL
+	WHERE SELL.SELL_NO = #{no}
+	</select>
+	
+	<insert id="aSellWrite" parameterType="hashmap">
+		INSERT INTO SELL(SELL.SELL_NO, SELL.ITEM_NAME, SELL.COUNT, SELL.SELL_DT)
+		VALUES(SELL_SEQ.NEXTVAL, #{name}, #{count}, #{date})
+	</insert>
+	
+	<update id="aSellUpdate" parameterType="hashmap">
+	UPDATE SELL SET SELL.ITEM_NAME = #{name},
+              SELL.COUNT = #{count},
+              SELL.SELL_DT = #{date}
+	WHERE SELL.SELL_NO = #{no}
+	</update>
+	
+	<delete id="aSellDelete" parameterType="hashmap">
+		DELETE FROM SELL
+		WHERE SELL.SELL_NO = #{no}
+	</delete>
+	 
+</mapper>
